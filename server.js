@@ -1,10 +1,11 @@
 const express = require("express");
-
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT;
 const moviesRoUter = require("./routes/movies");
 app.use(express.static("public"));
 app.use(express.json());
+app.use(cors());
 app.use("/movies", moviesRoUter);
 
 //middleware per  gestione degli errori

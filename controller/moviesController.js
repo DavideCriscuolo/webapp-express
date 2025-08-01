@@ -25,7 +25,22 @@ const show = (req, res) => {
   });
 };
 
+const showAll = (req, res) => {
+  const movie_id = req.params.id;
+  const sql = "SELECT * FROM reviews  WHERE movie_id = ? ;";
+  connection.query(sql, [movie_id], (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ err: err.message });
+    } else {
+      console.log(results);
+      res.json(results);
+    }
+  });
+};
+
 module.exports = {
   index,
   show,
+  showAll,
 };
