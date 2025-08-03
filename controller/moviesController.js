@@ -26,15 +26,38 @@ const show = (req, res) => {
 };
 
 const showAll = (req, res) => {
-  const movie_id = req.params.id;
-  const sql = "SELECT * FROM reviews  WHERE movie_id = ? ;";
-  connection.query(sql, [movie_id], (err, results) => {
+  // modificata query coin il Join
+  const id = req.params.id;
+  const sql =
+    "SELECT * FROM movies JOIN reviews ON reviews.movie_id = movies.id  WHERE movies.id = ? ;";
+  connection.query(sql, [id], (err, results) => {
     if (err) {
       console.log(err);
       return res.status(500).json({ err: err.message });
     } else {
       console.log(results);
-      res.json(results);
+      //create due varibili dove una contiene sottoforma di ogetto il primo risultato dell'array in modo tale da poter prendere solo una volta i dati del film, l'altro contiene tutti i dati relativi alle recensioni del film pushati nell array vuota che ho inizzializato nell oggetto
+      const movie = {
+        id: results[0].id,
+        title: results[0].title,
+        image: results[0].image,
+        director: results[0].director,
+        genre: results[0].genre,
+        abstract: results[0].abstract,
+        reviews: [],
+      };
+      results.forEach((row) => {
+        if (row.id) {
+          movie.reviews.push({
+            id: row.id,
+            name: row.name,
+            vote: row.vote,
+            text: row.text,
+          });
+        }
+      });
+      console.log(movie);
+      res.json(movie);
     }
   });
 };
