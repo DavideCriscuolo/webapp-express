@@ -72,8 +72,29 @@ const showAll = (req, res) => {
   });
 };
 
+const store = (req, res) => {
+  const movie_id = Number(req.params.movie_id);
+  const name = req.body.name;
+  const vote = req.body.vote;
+  const text = req.body.text;
+
+  const sql =
+    "INSERT INTO `reviews` (`movie_id`, `name`, `vote`, `text`) VALUES (?, ?, ?, ?);";
+
+  connection.query(sql, [movie_id, name, vote, text], (err, results) => {
+    if (err) {
+      console.log(movie_id);
+      res.status(500).json({ err: err.message });
+    } else {
+      console.log(results);
+      res.json(results);
+    }
+  });
+};
+
 module.exports = {
   index,
   show,
   showAll,
+  store,
 };
