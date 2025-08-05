@@ -7,6 +7,9 @@ const index = (re, res) => {
       console.log(err);
       return res.status(500).json({ err: err.message });
     }
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Nessun film trovato" });
+    }
     console.log(results);
     res.json(results);
   });
@@ -21,6 +24,9 @@ const show = (req, res) => {
       return res.status(500).json({ err: err.message });
     } else {
       res.json(results[0]);
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Nessun film trovato" });
     }
   });
 };
@@ -56,6 +62,10 @@ const showAll = (req, res) => {
           });
         }
       });
+      if (movie.length === 0) {
+        return res.status(404).json({ message: "Nessun film trovato" });
+      }
+
       console.log(movie);
       res.json(movie);
     }
